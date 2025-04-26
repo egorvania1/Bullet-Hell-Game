@@ -1,0 +1,48 @@
+[gd_scene load_steps=5 format=3 uid="uid://b28ceq5iimhfv"]
+
+[ext_resource type="PackedScene" uid="uid://bqmqt103rwly0" path="res://scenes/hero.tscn" id="1_nnsk1"]
+[ext_resource type="Script" uid="uid://k2vt3r043872" path="res://scripts/world.gd" id="1_rwgxs"]
+[ext_resource type="PackedScene" uid="uid://f16ykrbwt2uj" path="res://scenes/gui.tscn" id="3_4wyf3"]
+
+[sub_resource type="Curve2D" id="Curve2D_nnsk1"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, -141, -113, 0, 0, 0, 0, 148, -113, 0, 0, 0, 0, 149, 110, 0, 0, 0, 0, -141, 109, 0, 0, 0, 0, -141, -113)
+}
+point_count = 5
+
+[node name="World" type="Node2D"]
+script = ExtResource("1_rwgxs")
+
+[node name="Hero" parent="." instance=ExtResource("1_nnsk1")]
+unique_name_in_owner = true
+visible = false
+collision_mask = 9
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(3, 3)
+
+[node name="GameBorder" type="StaticBody2D" parent="."]
+collision_layer = 8
+collision_mask = 0
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="GameBorder"]
+build_mode = 1
+polygon = PackedVector2Array(-133, -100, 133, -100, 133, 100, -133, 100)
+
+[node name="BulletPath" type="Path2D" parent="."]
+unique_name_in_owner = true
+curve = SubResource("Curve2D_nnsk1")
+
+[node name="BulletPathSpawn" type="PathFollow2D" parent="BulletPath"]
+position = Vector2(-141, -113)
+
+[node name="BulletTimer" type="Timer" parent="."]
+unique_name_in_owner = true
+wait_time = 0.3
+
+[node name="GUI" parent="." instance=ExtResource("3_4wyf3")]
+unique_name_in_owner = true
+
+[connection signal="hit" from="Hero" to="." method="_on_hero_hit"]
+[connection signal="timeout" from="BulletTimer" to="." method="_on_bullet_timer_timeout"]
+[connection signal="start" from="GUI" to="." method="_on_gui_start"]

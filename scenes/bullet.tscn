@@ -1,0 +1,35 @@
+[gd_scene load_steps=5 format=3 uid="uid://bhl677k3ynnlw"]
+
+[ext_resource type="Texture2D" uid="uid://cyxwoa4htxvb2" path="res://sprites/bullet.png" id="1_mkf8s"]
+[ext_resource type="Script" uid="uid://4p7oqtv8gppa" path="res://scripts/bullet.gd" id="1_y25gk"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_y25gk"]
+radius = 4.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_l5glv"]
+radius = 4.0
+
+[node name="Bullet" type="RigidBody2D"]
+collision_layer = 2
+collision_mask = 2
+gravity_scale = 0.0
+script = ExtResource("1_y25gk")
+
+[node name="Bullet" type="Sprite2D" parent="."]
+texture = ExtResource("1_mkf8s")
+hframes = 4
+vframes = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_y25gk")
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+
+[node name="Killzone" type="Area2D" parent="."]
+collision_layer = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Killzone"]
+shape = SubResource("CircleShape2D_l5glv")
+
+[connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited"]
+[connection signal="body_entered" from="Killzone" to="." method="_on_killzone_body_entered"]
