@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://bqmqt103rwly0"]
+[gd_scene load_steps=8 format=3 uid="uid://bqmqt103rwly0"]
 
 [ext_resource type="Texture2D" uid="uid://kg1rohl7dimo" path="res://sprites/hero.png" id="1_3uyx6"]
 [ext_resource type="Script" uid="uid://duuk1xbee82ek" path="res://scripts/hero.gd" id="1_yvbpl"]
@@ -6,8 +6,46 @@
 [sub_resource type="CircleShape2D" id="CircleShape2D_g2brh"]
 radius = 5.0
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_yvbpl"]
+radius = 20.025
+
+[sub_resource type="Animation" id="Animation_yvbpl"]
+resource_name = "dodge"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.98),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 0, 0, 1), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_06baw"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_mv13s"]
+_data = {
+&"RESET": SubResource("Animation_06baw"),
+&"dodge": SubResource("Animation_yvbpl")
+}
+
 [node name="Hero" type="CharacterBody2D"]
-position = Vector2(1, 0)
 script = ExtResource("1_yvbpl")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
@@ -15,5 +53,48 @@ texture = ExtResource("1_3uyx6")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 unique_name_in_owner = true
-visible = false
 shape = SubResource("CircleShape2D_g2brh")
+
+[node name="Dodgebox" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Dodgebox"]
+shape = SubResource("CircleShape2D_yvbpl")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -12.0
+offset_top = -13.0
+offset_right = 12.0
+offset_bottom = 13.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="AbilityChargeBar" type="ProgressBar" parent="Control"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -12.5
+offset_right = 12.5
+offset_bottom = 4.0
+grow_horizontal = 2
+max_value = 10.0
+show_percentage = false
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+unique_name_in_owner = true
+libraries = {
+&"": SubResource("AnimationLibrary_mv13s")
+}
+
+[connection signal="body_entered" from="Dodgebox" to="." method="_on_dodgebox_body_entered"]
