@@ -1,6 +1,12 @@
 extends Node2D
+@onready var player = %Hero
+var score = 0
 
 @onready var bullet_scene = preload("res://scenes/bullet.tscn")
+
+func _ready() -> void:
+	player.ability_used.connect(_on_ability_used)
+	player.bullet_dodged.connect(_on_bullet_dodged)
 
 func _on_bullet_timer_timeout() -> void:
 	spawn_bullet()
@@ -30,8 +36,25 @@ func start_game() -> void:
 	%Hero.spawn()
 	%BulletTimer.start()
 	
+func reset_score() -> void:
+	score = 0
+	update_score()
+	
+func update_score() -> void:
+	%GUI.update_score(score)
+	
 func _on_hero_hit() -> void:
 	game_over()
 
 func _on_gui_start() -> void:
 	start_game()
+
+func _on_ability_used() -> void:
+	for bullet in get_tree().get_nodes_in_group("bullets"):
+		score += 1
+		bullet.destroy()
+	update_score()
+
+func _on_bullet_dodged() -> void:
+	score += 1
+	update_score()
