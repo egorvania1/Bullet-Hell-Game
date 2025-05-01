@@ -1,6 +1,6 @@
 extends CharacterBody2D
 
-const SPEED = 5000.0
+const SPEED = 150.0
 const JUMP_VELOCITY = -400.0
 const MAX_CHARGE = 10
 
@@ -20,8 +20,8 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	var direction := Input.get_vector("left", "right", "up", "down")
 	if (Input.is_action_just_pressed("ability")): use_ability()
-	velocity = direction * SPEED * delta
-	move_and_slide()
+	velocity = direction * SPEED
+	move_and_slide() #delta is used here
 
 func spawn() -> void:
 	position = start_pos
