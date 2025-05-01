@@ -20,6 +20,7 @@ config/icon="res://icon.svg"
 window/size/viewport_width=800
 window/size/viewport_height=600
 window/size/resizable=false
+window/stretch/mode="viewport"
 
 [dotnet]
 
@@ -28,6 +29,10 @@ project/assembly_name="bullet-hell"
 [global_group]
 
 bullets="where bullets live"
+
+[gui]
+
+theme/custom_font="uid://q2mk6sfkblx0"
 
 [input]
 
