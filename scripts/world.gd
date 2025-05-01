@@ -33,6 +33,9 @@ func game_over() -> void:
 	%BulletTimer.stop()
 	
 func start_game() -> void:
+	reset_score()
+	for bullet in get_tree().get_nodes_in_group("bullets"):
+		bullet.destroy()
 	%Hero.spawn()
 	%BulletTimer.start()
 	
