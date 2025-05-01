@@ -24,6 +24,7 @@ func _physics_process(delta: float) -> void:
 	move_and_slide() #delta is used here
 
 func spawn() -> void:
+	reset_charge()
 	position = start_pos
 	show()
 	$CollisionShape2D.set_deferred("disabled", false)
@@ -31,7 +32,6 @@ func spawn() -> void:
 func destroy() -> void:
 	hide()
 	hit.emit()
-	reset_charge()
 	$CollisionShape2D.set_deferred("disabled", true)
 
 func reset_charge() -> void:
@@ -42,7 +42,6 @@ func use_ability() -> void:
 	if charge == MAX_CHARGE:
 		ability_used.emit()
 		reset_charge()
-	#destroy bullets
 
 func _on_dodgebox_body_entered(body: Node2D) -> void:
 	if charge < MAX_CHARGE: charge += 1
