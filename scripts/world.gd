@@ -23,7 +23,7 @@ func spawn_bullet() -> void:
 	direction += randf_range(-PI / 4, PI / 4)
 	bullet.rotation = direction
 	
-	var velocity = Vector2(randf_range(150.0, 250.0), 0.0)
+	var velocity = Vector2(randf_range(100.0, 200.0), 0.0)
 	bullet.linear_velocity = velocity.rotated(direction)
 	
 	add_child(bullet)
